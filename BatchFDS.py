@@ -8,9 +8,73 @@ except ImportError:
     import tkFileDialog as filedialog
 import os
 
-window4 = tk.Tk()
-window4.title("Batch File Maker")
-window4.geometry("650x900")
+class VerticalScrolledFrame:
+
+    def __init__(self, master, **kwargs):
+        width = kwargs.pop('width', None)
+        height = kwargs.pop('height', None)
+        bg = kwargs.pop('bg', kwargs.pop('background', None))
+        self.outer = tk.Frame(master, **kwargs)
+
+        self.vsb = tk.Scrollbar(self.outer, orient=tk.VERTICAL)
+        self.vsb.pack(fill=tk.Y, side=tk.RIGHT)
+        self.canvas = tk.Canvas(self.outer, highlightthickness=0, width=width, height=height, bg=bg)
+        self.canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+        self.canvas['yscrollcommand'] = self.vsb.set
+        # mouse scroll does not seem to work with just "bind"; You have
+        # to use "bind_all". Therefore to use multiple windows you have
+        # to bind_all in the current widget
+        self.canvas.bind("<Enter>", self._bind_mouse)
+        self.canvas.bind("<Leave>", self._unbind_mouse)
+        self.vsb['command'] = self.canvas.yview
+
+        self.inner = tk.Frame(self.canvas, bg=bg)
+        # pack the inner Frame into the Canvas with the top left corner 4 pixels offset
+        self.canvas.create_window(4, 4, window=self.inner, anchor='nw')
+        self.inner.bind("<Configure>", self._on_frame_configure)
+
+        self.outer_attr = set(dir(tk.Widget))
+
+    def __getattr__(self, item):
+        if item in self.outer_attr:
+            # geometry attributes etc (eg pack, destroy, tkraise) are passed on to self.outer
+            return getattr(self.outer, item)
+        else:
+            # all other attributes (_w, children, etc) are passed to self.inner
+            return getattr(self.inner, item)
+
+    # noinspection PyUnusedLocal
+    def _on_frame_configure(self, event=None):
+        x1, y1, xCan, yCan = self.canvas.bbox("all")
+        height = self.canvas.winfo_height()
+        self.canvas.config(scrollregion=(0, 0, xCan, max(yCan, height)))
+
+    def _bind_mouse(self, event=None):
+        self.canvas.bind_all("<4>", self._on_mousewheel)
+        self.canvas.bind_all("<5>", self._on_mousewheel)
+        self.canvas.bind_all("<MouseWheel>", self._on_mousewheel)
+
+    def _unbind_mouse(self, event=None):
+        self.canvas.unbind_all("<4>")
+        self.canvas.unbind_all("<5>")
+        self.canvas.unbind_all("<MouseWheel>")
+
+    def _on_mousewheel(self, event):
+        """Linux uses event.num; Windows / Mac uses event.delta"""
+        if event.num == 4 or event.delta > 0:
+            self.canvas.yview_scroll(-1, "units")
+        elif event.num == 5 or event.delta < 0:
+            self.canvas.yview_scroll(1, "units")
+
+###################################################################
+
+windowXBF = tk.Tk()    # main Window
+windowXBF.title("Batch File Maker")
+windowXBF.geometry("700x600")
+
+window4 = VerticalScrolledFrame(windowXBF, width=100, borderwidth=2, relief=tk.SUNKEN, background="light gray")
+window4.pack(fill=tk.BOTH, expand=True)
+
 # this is a frame for the entries of files and options for the user to chose the devices
 frame1 = tk.LabelFrame(window4, text="Basic Inputs", relief=tk.SUNKEN)
 frame1.grid(row=0, column=0, sticky="nsew")
@@ -397,22 +461,21 @@ def output():    # main function to generate batch file
                         initialX_SLAB += incrementX_SLAB
                     initialY_Slab += incrementY_Slab
 
-            if incrementDirectionTRUSS.get() == "Y":
-                if incrementDirectionSLB.get() == "X":
-                    incrementX_SLAB = float(incX_slab.get())
-                    initialX_SLAB = float(xInt_slab.get()) + incrementX_SLAB / 2
-                    lengthX_SLAB = float(xLen_slab.get())
-                    while initialX_SLAB <= lengthX_SLAB:
-                        incrementY_Slab = float(incY_slab.get())
-                        initialY_Slab = float(y_slab.get()) + incrementY_Slab / 2
-                        slabYWidth = float(widthY_slab.get())
-                        while initialY_Slab <= slabYWidth:
-                            xN = initialX_SLAB + float(mesh.get())/2
-                            yN = initialY_Slab + float(mesh.get())/2
-                            zN = float(z_slab.get()) + float(mesh.get())/2
-                            batchFile(initialX_SLAB, xN, initialY_Slab, yN, float(z_slab.get()), zN, ior_Beam.get())
-                            initialY_Slab += incrementY_Slab
-                        initialX_SLAB += incrementX_SLAB
+            if incrementDirectionSLB.get() == "Y":
+                incrementX_SLAB = float(incX_slab.get())
+                initialX_SLAB = float(xInt_slab.get()) + incrementX_SLAB / 2
+                lengthX_SLAB = float(xLen_slab.get())
+                while initialX_SLAB <= lengthX_SLAB:
+                    incrementY_Slab = float(incY_slab.get())
+                    initialY_Slab = float(y_slab.get()) + incrementY_Slab / 2
+                    slabYWidth = float(widthY_slab.get())
+                    while initialY_Slab <= slabYWidth:
+                        xN = initialX_SLAB + float(mesh.get())/2
+                        yN = initialY_Slab + float(mesh.get())/2
+                        zN = float(z_slab.get()) + float(mesh.get())/2
+                        batchFile(initialX_SLAB, xN, initialY_Slab, yN, float(z_slab.get()), zN, ior_Beam.get())
+                        initialY_Slab += incrementY_Slab
+                    initialX_SLAB += incrementX_SLAB
 
 
 File_Generation = tk.Button(window4, text="Generate Batch File", command=output, width=15, height=1)\
