@@ -488,7 +488,7 @@ tk.Label(infoFrame, width=50, text="Run in Terminal (Linux or MacOX),use (chmod 
     .grid(row=15, column=0, columnspan=4, padx=5, pady=5)
 tk.Label(infoFrame, width=40, text=" and in the next line run the batch file with ", anchor='w') \
     .grid(row=16, column=0, columnspan=4, padx=5, pady=5)
-tk.Label(infoFrame, width=40, text="line run the batch file with ", anchor='w') \
+tk.Label(infoFrame, width=40, text=".\Batchfile.command ", anchor='w') \
     .grid(row=17, column=0, columnspan=4, padx=5, pady=5)
 
 
