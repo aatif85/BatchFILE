@@ -86,7 +86,7 @@ def location():  # Directory Location
 
 
 tk.Button(frame1, text="Directory", command=location, width=8, height=1).grid(row=0, column=1)
-tk.Label(frame1, width=15, text="Get Working Directory", anchor='e').grid(row=0, column=0, padx=5, pady=5)
+tk.Label(frame1, width=17, text="Get Working Directory", anchor='e').grid(row=0, column=0, padx=5, pady=5)
 
 # dropbox for the structural components
 data = ["Columns", "Beams", "Trusses", "Slabs"]
@@ -95,7 +95,7 @@ clicked6.set(data[0])  # use variables as list
 drop = tk.OptionMenu(frame1, clicked6, *data)
 drop.config(width=12)
 drop.grid(row=4, column=1, padx=5, pady=5)
-tk.Label(frame1, width=15, text="Structural Components", anchor='e').grid(row=4, column=0, padx=5, pady=5)
+tk.Label(frame1, width=20, text="Structural Components", anchor='e').grid(row=4, column=0, padx=5, pady=5)
 
 choose = tk.StringVar()
 choose.set("Yes")
@@ -119,12 +119,12 @@ i = 1  # it gives index to the output files from fds2ascii if indexing is contin
 smv = tk.Entry(frame1, width=5)   # this is the file name of the FDS file, do not add .smv
 smv.grid(row=1, column=1)
 smv.insert(tk.END, "FDS")
-tk.Label(frame1, width=10, text="SMV File Name", anchor='e').grid(row=1, column=0)
+tk.Label(frame1, width=15, text="SMV File Name", anchor='e').grid(row=1, column=0)
 
 maxT = tk.Entry(frame1, width=5)
 maxT.grid(row=1, column=3)
 maxT.insert(tk.END, "300")
-tk.Label(frame1, width=20, text="Time of Simulation", anchor='e').grid(row=1, column=2)
+tk.Label(frame1, width=15, text="Time of Simulation", anchor='e').grid(row=1, column=2)
 
 mesh = tk.Entry(frame1, width=5)
 mesh.grid(row=2, column=1)
