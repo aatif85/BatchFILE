@@ -107,7 +107,7 @@ question = tk.Label(frame1, width=20, text="Devices to be installed", anchor='e'
 ####################### Default Parameters
 
 fdsPr = "fds2ascii << EOF"  # to call fds2ascii
-bndf = 3  # data from BNDF file, it should be 2 for slice data
+plt3d = 1  # data from plt3d file, it should be 2 for slice data
 SF = 1  # for all data
 domain = "y"  # all data to with in a range "n" for all data
 Var = 1  # change it according to the quantity required (Var represents the variable of the interest )
@@ -362,8 +362,12 @@ def output():    # main function to generate batch file
                 t2 = t1 + dt
                 out = "test{}.csv".format(i)  # file name which will come after the program run in FDS2ASCII
                 fb1.writelines("{0}\n{1}\n{2}\n{3}\n{4}\n{5}\n{6}\n{7}\n{8}\n{9}\n{10}\n{11}\n{12}\n{13}"
-                               "\n{14}\n{15}\n{16}\n{17}\n".format(fdsPr, smv.get(), bndf, SF, domain, iX1, iX2,
+                               "\n{14}\n{15}\n{16}\n{17}\n".format(fdsPr, smv.get(), plt3d, SF, "y", iX1, iX2,
                                                                    jY1, jY2, kZ1, kZ2, t1, t2,
+                                                                   orientation, Var, int(BFI.get()), out, EOF))
+                fb1.writelines("{0}\n{1}\n{2}\n{3}\n{4}\n{5}\n{6}\n{7}\n{8}\n{9}\n{10}\n{11}\n{12}\n{13}"
+                               "\n{14}\n{15}\n".format(fdsPr, smv.get(), plt3d, SF, "y", iX1, iX2,
+                                                                   jY1, jY2, kZ1, kZ2, t,
                                                                    orientation, Var, int(BFI.get()), out, EOF))
                 t += dt
                 i += 1
@@ -478,7 +482,7 @@ def output():    # main function to generate batch file
                     initialX_SLAB += incrementX_SLAB
 
 
-File_Generation = tk.Button(window4, text="Generate Batch File", command=output, width=15, height=1)\
+File_Generation = tk.Button(window4, text="Generate Batch File", command=output, width=15, height=1) \
     .grid(row=5, column=0, padx=5, pady=5)
 # this is a frame for the entries of files and options for the user to chose the devices
 infoFrame = tk.LabelFrame(window4, text="Information", relief=tk.SUNKEN)
