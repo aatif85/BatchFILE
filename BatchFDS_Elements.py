@@ -111,7 +111,7 @@ def location():  # Directory Location
 
 
 tk.Button(frame1, text="Directory", command=location, width=8, height=1).grid(row=0, column=1)
-tk.Label(frame1, width=15, text="Get Working Directory", anchor='e').grid(row=0, column=0, padx=5, pady=5)
+tk.Label(frame1, width=17, text="Get Working Directory", anchor='e').grid(row=0, column=0, padx=5, pady=5)
 
 
 
@@ -223,7 +223,7 @@ i = 1  # it gives index to the output files from fds2ascii if indexing is contin
 smv = tk.Entry(frame1, width=5)   # this is the file name of the FDS file, do not add .smv
 smv.grid(row=1, column=1)
 smv.insert(tk.END, "FDS")
-tk.Label(frame1, width=10, text="SMV File Name", anchor='e').grid(row=1, column=0)
+tk.Label(frame1, width=12, text="SMV File Name", anchor='e').grid(row=1, column=0)
 
 maxT = tk.Entry(frame1, width=5)
 maxT.grid(row=1, column=3)
