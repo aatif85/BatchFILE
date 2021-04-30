@@ -11,7 +11,7 @@ except ImportError:
 import os
 
 window5 = tk.Tk()
-window5.title("BNDF to OpenSEES")
+window5.title("PlT3D to OpenSEES")
 window5.geometry("400x300")
 
 
@@ -58,7 +58,7 @@ def output():
     createFolder('./Header/')
     createFolder("./Header/Values/")
     createFolder("./Header/Values/DAT")
-    createFolder("./Header/Values/DAT/OpenSEES")
+    createFolder("./OpenSEES")
     global TIME
     time = int(dT.get())
     while time <= int(sim_time.get()):
@@ -167,7 +167,7 @@ def output():
     m = 1
     while m <= int(no_Devc.get()):
         f = open('Header/Values/DAT/AST{}.dat'.format(m), 'r')
-        newF = open('Header/Values/DAT/OpenSEES/AST{}.dat'.format(m), 'w')
+        newF = open('OpenSEES/AST{}.dat'.format(m), 'w')
         lines = f.readlines()  # read old content
         newF.write("0.0 20.0\n")  # write new content at the beginning
         for line in lines:  # write old content after new
